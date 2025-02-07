@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }} # 🔥 Use the stored PAT
 
       - name: Generate components.json
         run: |
@@ -17,14 +19,14 @@ jobs:
           for file in components/*.jsx components/*.tsx; do
             [ -e "$file" ] || continue
             name=$(basename "$file" .jsx | basename "$file" .tsx)
-            echo "{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/my-org/component-registry/main/$file\" }," >> components.json
+            echo "{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\" }," >> components.json
           done
           echo "]" >> components.json
 
-      - name: Commit and Push
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add components.json
           git commit -m "Auto-update components.json" || exit 0
-          git push
+          git push origin main
