@@ -1,4 +1,4 @@
-export default function Productslider(){ 
+function Productslider(){ 
   const [name, setName] = useState('Frens');
   useEffect(() => {
     setTimeout(()=>{
