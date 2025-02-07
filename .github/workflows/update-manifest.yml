@@ -15,12 +15,22 @@ jobs:
 
       - name: Generate components.json
         run: |
+          # Start JSON array
           echo "[" > components.json
+          
+          # Collect JSON objects in a variable (to handle commas properly)
+          JSON_OBJECTS=()
+          
           for file in components/*.jsx components/*.tsx; do
             [ -e "$file" ] || continue
             name=$(basename "$file" .jsx | basename "$file" .tsx)
-            echo "{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\" }," >> components.json
+            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\" }")
           done
+          
+          # Join JSON objects with a comma and output correctly
+          (IFS=,; echo "${JSON_OBJECTS[*]}") >> components.json
+          
+          # Close JSON array
           echo "]" >> components.json
 
       - name: Commit and Push Changes
