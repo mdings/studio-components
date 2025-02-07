@@ -1,0 +1,30 @@
+name: Update Components Manifest
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Generate components.json
+        run: |
+          echo "[" > components.json
+          for file in components/*.jsx components/*.tsx; do
+            [ -e "$file" ] || continue
+            name=$(basename "$file" .jsx | basename "$file" .tsx)
+            echo "{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/my-org/component-registry/main/$file\" }," >> components.json
+          done
+          echo "]" >> components.json
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add components.json
+          git commit -m "Auto-update components.json" || exit 0
+          git push
