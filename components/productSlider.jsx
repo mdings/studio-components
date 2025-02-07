@@ -1,5 +1,5 @@
 function Productslider(){ 
-  const [name, setName] = useState('Frens');
+  const [name, setName] = useState('Kees');
   useEffect(() => {
     setTimeout(()=>{
       setName('Maarten');
