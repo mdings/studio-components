@@ -1,5 +1,3 @@
-react";
-
 function RemoteProducts({ name: initialName }) {
   const [name, setName] = useState(initialName);
   useEffect(() => {
