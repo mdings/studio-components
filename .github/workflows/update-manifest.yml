@@ -20,11 +20,24 @@ jobs:
           
           # Collect JSON objects in a variable (to handle commas properly)
           JSON_OBJECTS=()
-          
+
           for file in components/*.jsx components/*.tsx; do
             [ -e "$file" ] || continue
+            
             name=$(basename "$file" .jsx | basename "$file" .tsx)
-            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\" }")
+            definition_file="components/$name.definition.json"
+            
+            # Extract description if definition file exists
+            if [ -f "$definition_file" ]; then
+              description=$(jq -r '.description // empty' "$definition_file")
+            else
+              description=""
+            fi
+
+            # Escape double quotes in description
+            description=$(echo "$description" | jq -R -s '. | @json')
+
+            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": $description }")
           done
           
           # Join JSON objects with a comma and output correctly
@@ -38,5 +51,5 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add components.json
-          git commit -m "Auto-update components.json" || exit 0
+          git commit -m "Auto-update components.json with descriptions" || exit 0
           git push origin main
