@@ -6,5 +6,11 @@ function newProductSlider() {
     }, 3000);
   }, []);
 
-  return <div style=""--tw-bg-opacity: 1;\n  background-color: rgb(255 0 0 / var(--tw-bg-opacity, 1));"">We are testing our component {name}</div>;
+  return (
+    <div style="{"-TwBgOpacity":"1","backgroundColor":"rgb(255 0 0 / var(--tw-bg-opacity, 1))","fontSize":"1.875rem","lineHeight":"2.25rem","fontWeight":"700","textDecorationLine":"underline"}">
+      <span style="{"-TwBgOpacity":"1","backgroundColor":"rgb(255 0 0 / var(--tw-bg-opacity, 1))","fontSize":"1.875rem","lineHeight":"2.25rem","fontWeight":"700","textDecorationLine":"underline"}">
+        We are testing our component {name}
+      </span>
+    </div>
+  );
 }
