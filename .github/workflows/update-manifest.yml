@@ -37,7 +37,7 @@ jobs:
             # Escape double quotes in description
             description=$(echo "$description" | jq -R -s '. | @json')
 
-            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": $description }")
+            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": \"$description\" }")
           done
           
           # Join JSON objects with a comma and output correctly
