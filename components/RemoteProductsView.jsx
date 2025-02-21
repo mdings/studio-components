@@ -1,10 +1,22 @@
 function RemoteProductsView({ name: initialName }) {
-  const [name, setName] = useState(initialName);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    setTimeout(() => {
-      setName("Maarten");
-    }, 3000);
+    const fetchProperties = async () => {
+      const products = await fetch(`/api/fashion`).then((response) =>
+        response.json()
+      );
+      setProducts(products);
+    };
+
+    fetchProperties();
   }, []);
 
-  return <div className="bg-[red]">These are our products {name}</div>;
+  return (
+    <div className="flex flex-col w-full max-w-none">
+      Here are the products
+      {products.map((product) => {
+        return <div>{product.name}</div>;
+      })}
+    </div>
+  );
 }
