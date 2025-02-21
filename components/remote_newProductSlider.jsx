@@ -7,9 +7,9 @@ function newProductSlider() {
   }, []);
 
   return (
-    <div class="bg-[red]">
-      <span class="text-3xl font-bold underline">
-        We are testing our NEW component {name}
+    <div className="bg-[red]">
+      <span className="text-3xl font-bold underline">
+        We are testing our NEWEST component {name}
       </span>
     </div>
   );
