@@ -1,21 +1,3 @@
-name: Update Components Manifest
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  update-manifest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_PAT }}
-
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
       - name: Generate components.json
         run: |
           # Start JSON array
@@ -34,7 +16,7 @@ jobs:
 
             if [ -f "$definition_file" ]; then
               echo "Found definition file: $definition_file"
-              description=$(jq -r '.description // empty' "$definition_file")
+              description=$(jq -r '.description // empty' "$definition_file" | awk '{$1=$1};1')  # Trim spaces/newlines
 
               if [ -z "$description" ]; then
                 echo "Warning: No description found in $definition_file"
@@ -45,8 +27,8 @@ jobs:
               echo "No definition file for $name"
             fi
 
-            # Escape double quotes in description
-            description=$(echo "$description" | jq -R -s '. | @json')
+            # Ensure proper JSON escaping
+            description=$(echo "$description" | jq -R '.')
 
             JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": $description }")
           done
@@ -56,11 +38,3 @@ jobs:
           
           # Close JSON array
           echo "]" >> components.json
-
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add components.json
-          git commit -m "Auto-update components.json with descriptions" || exit 0
-          git push origin main
