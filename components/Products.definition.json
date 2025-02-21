@@ -12,7 +12,6 @@
       "validations": {
         "in": [
           { "value": "Popularity" },
-          { "value": "Relevancy" },
           { "value": "Cheapest" },
           { "value": "Newest" },
           { "value": "Oldest" }
@@ -34,18 +33,6 @@
           { "value": "unlimited" }
         ]
       }
-    },
-    "showPagination": {
-      "group": "style",
-      "displayName": "Show pagination?",
-      "type": "Boolean",
-      "defaultValue": true
-    },
-    "showSorters": {
-      "group": "style",
-      "displayName": "Show sorters & filters?",
-      "type": "Boolean",
-      "defaultValue": true
     }
   },
   "builtInStyles": [
