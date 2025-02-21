@@ -1,14 +1,14 @@
 function newProductSlider() {
   const [name, setName] = useState("Kees");
-  useEffect(() =&gt; {
-    setTimeout(() =&gt; {
+  useEffect(() => {
+    setTimeout(() => {
       setName("Maarten");
     }, 3000);
   }, []);
 
   return (
-    <div style="{}">
-      <span style="{}">
+    <div class="bg-[red]">
+      <span class="text-3xl font-bold underline">
         We are testing our component {name}
       </span>
     </div>
