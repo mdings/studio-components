@@ -1,17 +1,23 @@
-function RemoteProductsView({ max = 6 }) {
+function RemoteProductsView({ max }) {
   const maxItems = max ? (max == "unlimited" ? 1000 : parseInt(max)) : 1000;
   const [products, setProducts] = useState([]);
+  const [slicedProducts, setSlicedProducts] = useState([]);
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const products = await fetch(`/api/fashion`).then((response) =>
+      const allProducts = await fetch(`/api/fashion`).then((response) =>
         response.json()
       );
-      setProducts(products);
+      setProducts(allProducts);
+      setSlicedProducts(allProducts.slice(0, maxItems));
     };
 
     fetchProperties();
   }, []);
+
+  useEffect(() => {
+    setSlicedProducts(products.slice(0, maxItems));
+  }, [maxItems]);
 
   function oneWeekAgo() {
     const date = new Date();
@@ -26,7 +32,7 @@ function RemoteProductsView({ max = 6 }) {
         className="grid grid-cols-1 gap-y-4 sm:grid-cols-2  sm:gap-y-10 lg:grid-cols-3 data-[products=1]:lg:grid-cols-1 data-[products=2]:lg:grid-cols-2"
         data-products={Math.min(3, maxItems)}
       >
-        {products.map((product) => {
+        {slicedProducts.map((product) => {
           return (
             <div
               key={product.id}
