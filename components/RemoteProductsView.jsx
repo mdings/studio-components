@@ -6,5 +6,5 @@ function RemoteProductsView({ name: initialName }) {
     }, 3000);
   }, []);
 
-  return <div className="bg-[blue]">These are our products {name}</div>;
+  return <div className="bg-[red]">These are our products {name}</div>;
 }
