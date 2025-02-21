@@ -1,7 +1,11 @@
-function RemoteProductsView({ max }) {
+function RemoteProductsView({ max, sortBy: sortByProp = "popularity" }) {
   const maxItems = max ? (max == "unlimited" ? 1000 : parseInt(max)) : 1000;
   const [products, setProducts] = useState([]);
   const [slicedProducts, setSlicedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState(
+    sortByProp.toLowerCase().replace(" ", "_")
+  );
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -10,6 +14,7 @@ function RemoteProductsView({ max }) {
       );
       setProducts(allProducts);
       setSlicedProducts(allProducts.slice(0, maxItems));
+      setLoading(false);
     };
 
     fetchProperties();
@@ -19,11 +24,47 @@ function RemoteProductsView({ max }) {
     setSlicedProducts(products.slice(0, maxItems));
   }, [maxItems]);
 
+  useEffect(() => {
+    Sort();
+  }, [sortByProp]);
+
   function oneWeekAgo() {
     const date = new Date();
     date.setDate(date.getDate() - 7);
     return date;
   }
+
+  function Sort() {
+    if (products.length < 0) return;
+    const sorter = sortByProp.toLowerCase().replace(" ", "_");
+    // setSortBy(sorter);
+    if (sorter == "cheapest") {
+      setSlicedProducts(
+        products.sort((a, b) => a.price - b.price).slice(0, maxItems)
+      );
+    } else if (sorter == "oldest") {
+      setSlicedProducts(
+        products
+          .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+          .slice(0, maxItems)
+      );
+    } else if (sorter == "newest") {
+      setSlicedProducts(
+        products
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, maxItems)
+      );
+    } else if (sorter == "popularity") {
+      setSlicedProducts(
+        products.sort((a, b) => b.rating - a.rating).slice(0, maxItems)
+      );
+    } else {
+      setSlicedProducts(products.slice(0, maxItems));
+    }
+  }
+
+  // Render based on the states
+  if (loading) return <div>Loading products...</div>;
 
   return (
     <div className="flex flex-col w-full max-w-none">
