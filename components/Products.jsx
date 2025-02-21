@@ -68,7 +68,6 @@ function RemoteProductsView({ max, sortBy: sortByProp = "popularity" }) {
 
   return (
     <div className="flex flex-col w-full max-w-none">
-      <h1>All your products</h1>
       <div
         className="grid grid-cols-1 gap-y-4 sm:grid-cols-2  sm:gap-y-10 lg:grid-cols-3 data-[products=1]:lg:grid-cols-1 data-[products=2]:lg:grid-cols-2"
         data-products={Math.min(3, maxItems)}
