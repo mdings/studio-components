@@ -23,7 +23,7 @@
       "group": "style",
       "displayName": "Max number of items to display",
       "type": "Text",
-      "defaultValue": "unlimited",
+      "defaultValue": "3",
       "validations": {
         "in": [
           { "value": "1" },
