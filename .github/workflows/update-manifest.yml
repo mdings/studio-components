@@ -11,7 +11,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_PAT }} # 🔥 Use the stored PAT
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
       - name: Generate components.json
         run: |
@@ -26,18 +29,26 @@ jobs:
             
             name=$(basename "$file" .jsx | basename "$file" .tsx)
             definition_file="components/$name.definition.json"
-            
-            # Extract description if definition file exists
+
+            description=""
+
             if [ -f "$definition_file" ]; then
+              echo "Found definition file: $definition_file"
               description=$(jq -r '.description // empty' "$definition_file")
+
+              if [ -z "$description" ]; then
+                echo "Warning: No description found in $definition_file"
+              else
+                echo "Extracted description: $description"
+              fi
             else
-              description=""
+              echo "No definition file for $name"
             fi
 
             # Escape double quotes in description
             description=$(echo "$description" | jq -R -s '. | @json')
 
-            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": \"$description\" }")
+            JSON_OBJECTS+=("{ \"name\": \"$name\", \"source\": \"https://raw.githubusercontent.com/mdings/studio-components/main/$file\", \"description\": $description }")
           done
           
           # Join JSON objects with a comma and output correctly
