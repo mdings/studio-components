@@ -27,7 +27,7 @@ jobs:
           for file in components/*.jsx components/*.tsx; do
             [ -e "$file" ] || continue
             
-            name=$(basename "$file" .jsx | basename "$file" .tsx)
+            name=$(basename "$file" | sed 's/\..*$//')
             definition_file="components/$name.definition.json"
 
             description=""
