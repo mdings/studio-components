@@ -1,3 +1,21 @@
+name: Update Components Manifest
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Generate components.json
         run: |
           # Start JSON array
@@ -8,7 +26,7 @@
 
           for file in components/*.jsx components/*.tsx; do
             [ -e "$file" ] || continue
-            
+
             name=$(basename "$file" | sed 's/\..*$//')
             definition_file="components/$name.definition.json"
 
@@ -38,3 +56,11 @@
           
           # Close JSON array
           echo "]" >> components.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add components.json
+          git commit -m "Auto-update components.json with descriptions" || exit 0
+          git push origin main
