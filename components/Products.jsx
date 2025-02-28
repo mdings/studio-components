@@ -9,7 +9,7 @@ function RemoteProductsView({ max, sortBy: sortByProp = "popularity" }) {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const allProducts = await fetch(`https://monorepo-studio-pejf05aay-jackhunts-projects.vercel.app/pages/api/fashion.js`).then((response) =>
+      const allProducts = await fetch(`https://mock-fashion-api.vercel.app/api/fashion`).then((response) =>
         response.json()
       );
       setProducts(allProducts);
