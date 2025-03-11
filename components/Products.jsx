@@ -9,9 +9,9 @@ function RemoteProductsView({ max, sortBy: sortByProp = "popularity" }) {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const allProducts = await fetch(`https://mock-fashion-api.vercel.app/api/fashion`).then((response) =>
-        response.json()
-      );
+      const allProducts = await fetch(
+        `https://mock-fashion-api.vercel.app/api/fashion`
+      ).then((response) => response.json());
       setProducts(allProducts);
       setSlicedProducts(allProducts.slice(0, maxItems));
       setLoading(false);
